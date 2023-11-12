@@ -9,6 +9,7 @@ import uuid
 from datetime import datetime
 from functools import wraps
 
+
 #Setting up Flask
 app = Flask(__name__)
 
@@ -174,6 +175,12 @@ def calculate_fees_percentage_increased(trainees):
     return f"{percentage_increase:.2f}% increase from last month"
 
 
+def number_to_month_name(month_number):
+    try:
+        return calendar.month_name[month_number]
+    except (IndexError, ValueError):
+        return 'Invalid Month Number'
+
 
 # get income expense data for moris chart by month
 def get_monthly_income_expense_data():
@@ -188,8 +195,8 @@ def get_monthly_income_expense_data():
                                     ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
 
     # Convert the result to a list of dictionaries
-    income_data = [{'month': month, 'total_income': int(total_income)} for month, total_income in income_data]
-    expense_data = [{'month': month, 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
+    income_data = [{'month': number_to_month_name(month), 'total_income': int(total_income)} for month, total_income in income_data]
+    expense_data = [{'month': number_to_month_name(month), 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
 
     return income_data, expense_data
 
