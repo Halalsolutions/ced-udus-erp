@@ -176,22 +176,22 @@ def calculate_fees_percentage_increased(trainees):
 
 
 # get income expense data for moris chart by month
-# def get_monthly_income_expense_data():
-#     # calculate total income by month
-#     income_data = db.session.query(func.extract('month', Fee.payment_date).label('month'),
-#                                    func.sum(Fee.amount).label('total_income')
-#                                    ).group_by(func.extract('month', Fee.payment_date)).all()
-#
-#     # calculate total expenses by month
-#     expense_data = db.session.query(func.extract('month', InventoryItem.purchase_date).label('month'),
-#                                     func.sum(InventoryItem.price).label('total_expenses')
-#                                     ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
-#
-#     # Convert the result to a list of dictionaries
-#     income_data = [{'month': calendar.month_name[month], 'total_income': int(total_income)} for month, total_income in income_data]
-#     expense_data = [{'month': calendar.month_name[month], 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
-#
-#     return income_data, expense_data
+def get_monthly_income_expense_data():
+    # calculate total income by month
+    income_data = db.session.query(func.extract('month', Fee.payment_date).label('month'),
+                                   func.sum(Fee.amount).label('total_income')
+                                   ).group_by(func.extract('month', Fee.payment_date)).all()
+
+    # calculate total expenses by month
+    expense_data = db.session.query(func.extract('month', InventoryItem.purchase_date).label('month'),
+                                    func.sum(InventoryItem.price).label('total_expenses')
+                                    ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
+
+    # Convert the result to a list of dictionaries
+    income_data = [{'month': calendar.month_name[month], 'total_income': int(total_income)} for month, total_income in income_data]
+    expense_data = [{'month': calendar.month_name[month], 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
+
+    return income_data, expense_data
 
 # covert string date to date ob
 def to_date_obj(date):
