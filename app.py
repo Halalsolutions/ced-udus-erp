@@ -21,7 +21,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -188,8 +188,8 @@ def get_monthly_income_expense_data():
                                     ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
 
     # Convert the result to a list of dictionaries
-    income_data = [{'month': calendar.month_name[month], 'total_income': int(total_income)} for month, total_income in income_data]
-    expense_data = [{'month': calendar.month_name[month], 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
+    income_data = [{'month': month, 'total_income': int(total_income)} for month, total_income in income_data]
+    expense_data = [{'month': month, 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
 
     return income_data, expense_data
 
