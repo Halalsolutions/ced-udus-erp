@@ -1,0 +1,101 @@
+{% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Course</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_courses') }}">Courses</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('add_course') }}">Add Course</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Courses Details</h4>
+							</div>
+							<div class="card-body">
+								<form enctype="multipart/form-data" action="{{ url_for('add_course') }}" method="post">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course Name</label>
+												<input name="course_name" type="text" class="form-control" required>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course Code</label>
+												<input name="course_code" type="text" class="form-control" required>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course Details</label>
+												<textarea name="course_details" class="form-control" rows="5" required></textarea>
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course Duration</label>
+												<input name="course_duration" type="text" class="form-control" required>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course Price</label>
+												<input name="course_price" type="text" class="form-control" required>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Facilitator</label>
+												<input name="facilitator" type="text" class="form-control" required>
+											</div>
+										</div>
+
+
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group fallback w-100">
+												<label class="form-label d-block">Course Photo</label>
+												<input formenctype="multipart/form-data" name="image" type="file" class="dropify form-control" data-default-file="" required>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<button href="{{ url_for('add_course') }}" type="submit" class="btn btn-primary">Submit</button>
+											<button {{ url_for('all_courses') }} type="submit" class="btn btn-light">Cancel</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

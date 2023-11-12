@@ -1,0 +1,116 @@
+{% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Edit Inventory Item</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('edit_inventory_item', item_id=item_to_edit.id) }}">Edit Inventory Item</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Edit Inventory Item</h4>
+							</div>
+							<div class="card-body">
+								<form action="{{ url_for('edit_inventory_item', item_id=item_to_edit.id) }}" method="post">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Item Name</label>
+												<input value="{{ item_to_edit.item_name }}" required name="item_name" type="text" class="form-control">
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Price</label>
+												<input value="{{ item_to_edit.price }}" required name="item_price" type="number" class="form-control">
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Department For</label>
+												<select required name="department_for" class="form-control">
+													<option value=""></option>
+													<option {% if item_to_edit.department_for == 'Computer' %}selected{% endif %} value="Computer">Computer</option>
+													<option {% if item_to_edit.department_for == 'DataEntry' %}selected{% endif %} value="DataEntry">Data Entry</option>
+													<option {% if item_to_edit.department_for == 'Management' %}selected{% endif %} value="Management">Management</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Course For</label>
+												<select required name="course_for" class="form-control">
+													<option value=""></option>
+													<option {% if item_to_edit.course_for == 'Computer' %}selected{% endif %} value="Computer">Book</option>
+													<option {% if item_to_edit.course_for == 'DataEntry' %}selected{% endif %} value="DataEntry">Newspaper</option>
+													<option {% if item_to_edit.course_for == 'Management' %}selected{% endif %} value="Management">Comics</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Purchase Date</label>
+												<input value="{{ item_to_edit.purchase_date }}" required type="date" name="purchase_date" class="form-control" id="datepicker">
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Status</label>
+												<select required name="item_status" class="form-control">
+													<option value=""></option>
+													<option {% if item_to_edit.status == 'In Stock' %}selected{% endif %} value="In Stock">In Stock</option>
+													<option {% if item_to_edit.status == 'Out Of Stock' %}selected{% endif %} value="Out Of Stock">Out Of Stock</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Item Details</label>
+												<textarea required name="item_details" class="form-control" rows="5">{{ item_to_edit.item_details }}</textarea>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<button href="{{ url_for('edit_inventory_item') }}" type="submit" class="btn btn-primary">Submit</button>
+											<button href="{{ url_for('inventory') }}" type="submit" class="btn btn-light">Cencel</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

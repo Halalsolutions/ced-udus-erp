@@ -1,0 +1,83 @@
+<!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Halal Solutions</a> 2023</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+		<!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="../static/vendor/global/global.min.js"></script>
+	<script src="../static/js/deznav-init.js"></script>
+	<script src="../static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="../static/js/custom.min.js"></script>
+
+	<!-- Svganimation scripts -->
+    <script src="../static/vendor/svganimation/vivus.min.js"></script>
+    <script src="../static/vendor/svganimation/svg.animation.js"></script>
+
+	<!-- pickdate -->
+    <script src="../static/vendor/pickadate/picker.js"></script>
+    <script src="../static/vendor/pickadate/picker.time.js"></script>
+    <script src="../static/vendor/pickadate/picker.date.js"></script>
+
+	<!-- Pickdate -->
+    <script src="../static/js/plugins-init/pickadate-init.js"></script>
+
+    <!-- Datatable -->
+    <script src="../static/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="../static/js/plugins-init/datatables.init.js"></script>
+    <script src="../static/js/custom-js.js"></script>
+
+
+    <!-- JavaScript to update the hidden input field when an option is selected -->
+    <script>
+    document.getElementById("traineeSelect").addEventListener("change", function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var traineeId = selectedOption.getAttribute("data-trainee-id");
+            var traineeName = selectedOption.getAttribute("data-trainee-name");
+
+            // Update the hidden input fields with the selected trainee ID and name
+            document.getElementById("selectedTraineeId").value = traineeId;
+            document.getElementById("selectedTraineeName").value = traineeName;
+            });
+    </script>
+
+    <!-- Javascript Receipt Printing script -->
+    <script>
+    function printDiv(divId) {
+        var printContent = document.getElementById(divId);
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContent.innerHTML;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+
+
+</body>
+</html>

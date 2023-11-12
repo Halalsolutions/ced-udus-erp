@@ -1,0 +1,100 @@
+<!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="deznav">
+            <div class="deznav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a href="{{ url_for('home') }}" aria-expanded="false">
+							<i class="la la-home"></i>
+							<span class="nav-text">Dashboard</span>
+						</a>
+
+                    </li>
+					<li><a class="ai-icon" href="{{ url_for('event_management') }}" aria-expanded="false">
+							<i class="la la-calendar"></i>
+							<span class="nav-text">Event Management</span>
+						</a>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-user"></i>
+							<span class="nav-text">Facilitators</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('all_facilitators') }}">All Facilitators</a></li>
+                            <li><a href={{ url_for('add_facilitator') }}>Add Facilitator</a></li>
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-users"></i>
+							<span class="nav-text">Trainees</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href={{ url_for('all_trainees') }}>All Trainees</a></li>
+                            <li><a href={{ url_for('add_trainee') }}>Add Trainee</a></li>
+
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-graduation-cap"></i>
+							<span class="nav-text">Courses</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href={{ url_for('all_courses') }}>All Courses</a></li>
+                            <li><a href={{ url_for('add_course') }}>Add Courses</a></li>
+
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-book"></i>
+							<span class="nav-text">Inventory</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href={{ url_for('inventory') }}>All Inventories</a></li>
+                            <li><a href={{ url_for('add_to_inventory') }}>Add To Inventory</a></li>
+
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-building"></i>
+							<span class="nav-text">Departments</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href={{ url_for('departments') }}>All Departments</a></li>
+                            <li><a href={{ url_for('add_department') }}>Add Departments</a></li>
+
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-users"></i>
+							<span class="nav-text">Staff</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href={{ url_for('staff') }}>All Staff</a></li>
+                            <li><a href={{ url_for('add_staff') }}>Add Staff</a></li>
+
+                        </ul>
+                    </li>
+
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-dollar"></i>
+							<span class="nav-text">Fees</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('fees_collection') }}">Fees Collection</a></li>
+                            <li><a href="{{ url_for('add_fees') }}">Add Fees</a></li>
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
+				</ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->

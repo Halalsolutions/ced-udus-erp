@@ -1,0 +1,400 @@
+        {% include "header.html" %}
+
+        {% include "sidebar.html" %}
+		
+		<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row">
+					<div class="col-xl-6 col-xxl-6 col-sm-12">
+						<div class="row">
+							<div class="col-xl-6 col-xxl-6 col-sm-6">
+								<div class="widget-stat card">
+									<div class="card-body">
+										<h4 class="card-title">Total Students</h4>
+										<h3>{{ trainees_length }}</h3>
+										<div class="progress mb-2">
+											<div class="progress-bar progress-animated bg-primary" style="width: 80%"></div>
+										</div>
+										<small>{{ percentage_increase }}</small>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-6 col-xxl-6 col-sm-6">
+								<div class="widget-stat card">
+									<div class="card-body">
+										<h4 class="card-title">New Students</h4>
+										<h3>{{ new_trainees }}</h3>
+										<div class="progress mb-2">
+											<div class="progress-bar progress-animated bg-warning" style="width: 50%"></div>
+										</div>
+										<small>{{ percentage_increase }}</small>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-6 col-xxl-6 col-sm-6">
+								<div class="widget-stat card">
+									<div class="card-body">
+										<h4 class="card-title">Total Course</h4>
+										<h3>{{ course_length }}</h3>
+										<div class="progress mb-2">
+											<div class="progress-bar progress-animated bg-red" style="width: 76%"></div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-6 col-xxl-6 col-sm-6">
+								<div class="widget-stat card">
+									<div class="card-body">
+										<h4 class="card-title">Fees Collection</h4>
+										<h3>₦{{ fees_collected }}</h3>
+										<div class="progress mb-2">
+											<div class="progress-bar progress-animated bg-success" style="width: 30%"></div>
+										</div>
+										<small>{{ fee_percentage_increase }}</small>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>					
+					<div class="col-xl-6 col-xxl-6 col-sm-12">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Income/Expense Report</h3>
+							</div>
+							<div class="card-body">
+								 <div id="morris_bar_2" class="morris_chart_height"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-4 col-xxl-4 col-md-12">
+						<div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Facilitators List</h4>
+                            </div>
+                            <div class="card-body">
+                                {% for facilitator in all_facilitators[:5] %}
+								<div class="media mb-3 align-items-center border-bottom pb-3">
+                                    <img class="me-3 border rounded-circle border-primary" alt="image" width="50" src="../static/images/professor.png">
+                                    <div class="media-body">
+                                        <h5 class="mb-0 text-pale-sky">{{ facilitator.first_name }} {{ facilitator.last_name }} <small class="text-muted">( {{ facilitator.course }} )</small></h5>
+                                        <small class="text-primary mb-0">Available</small>
+									</div>
+								</div>
+                                {% endfor %}
+
+
+
+
+								<div class="text-center pt-3">
+									<a href="{{ url_for('all_facilitators') }}" class="btn btn-primary btn-rounded btn px-5 btn-lg">View All</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-xl-8 col-lg-8 col-xxl-8 col-md-12">
+						<div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Trainees List</h4>
+                            </div>
+                            <div class="card-body">
+							    <div class="table-responsive recentOrderTable">
+                                    <table class="table verticle-middle table-responsive-md">
+                                        <thead>
+                                            <tr>
+
+                                                <th scope="col">Student Name</th>
+                                                <th scope="col">Course</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Gender</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for trainee in all_trainees[:4] %}
+                                            <tr>
+
+                                                <td>{{ trainee.first_name }} {{ trainee.last_name }}</td>
+                                                <td>{{ trainee.course }}</td>
+                                                <td>{{ trainee.email }}</td>
+                                                <td>{{ trainee.gender }}</td>
+
+                                            </tr>
+                                            {% endfor %}
+
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <div class="text-center pt-3">
+									<a href="{{ url_for('all_trainees') }}" class="btn btn-primary btn-rounded btn px-5 btn-lg">View All</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!--
+					<div class="col-xl-12 col-lg-12 col-xxl-12 col-md-12">
+						<div class="card profile-tab">
+                            <div class="card-header">
+                                <h4 class="card-title">Salary Status</h4>
+                            </div>
+							<div class="card-body custom-tab-1">
+								<ul class="nav nav-tabs mb-3">
+									<li class="nav-item"><a href="#my-posts" data-bs-toggle="tab" class="nav-link pb-2 active show">Professors</a></li>
+									<li class="nav-item"><a href="#about-me" data-bs-toggle="tab" class="nav-link pb-2">Librarian</a></li>
+									<li class="nav-item"><a href="#profile-settings" data-bs-toggle="tab" class="nav-link pb-2">Other</a></li>
+								</ul>
+								<div class="tab-content">
+									<div id="my-posts" class="tab-pane fade active show">
+										<div class="table-responsive">
+											<table class="table table-responsive-md">
+												<thead>
+													<tr>
+														<th scope="col">#</th>
+														<th scope="col">Name</th>
+														<th scope="col">Status</th>
+														<th scope="col">Date</th>
+														<th scope="col">Ammount</th>
+														<th scope="col">Transaction ID</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td><img src="../static/images/profile/pic1.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Angelica Ramos</td>
+														<td><span class="badge badge-rounded badge-success">Paid</span></td>
+														<td>12 August 2022</td>
+														<td>$100</td>
+														<td>#42317</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic2.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Bradley Greer</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>11 July 2022</td>
+														<td>$200</td>
+														<td>#54682</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic3.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Cedric Kelly</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>10 May 2022</td>
+														<td>$400</td>
+														<td>#57894</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic4.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Caesar Vance</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>09 April 2022</td>
+														<td>$300</td>
+														<td>#57864</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic5.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Rhona Davidson</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>08 March 2022</td>
+														<td>$500</td>
+														<td>#56387</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div id="about-me" class="tab-pane fade">
+										<div class="table-responsive">
+											<table class="table table-responsive-md">
+												<thead>
+													<tr>
+														<th scope="col">#</th>
+														<th scope="col">Name</th>
+														<th scope="col">Status</th>
+														<th scope="col">Date</th>
+														<th scope="col">Ammount</th>
+														<th scope="col">Transaction ID</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td><img src="../static/images/profile/pic6.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Angelica Ramos</td>
+														<td><span class="badge badge-rounded badge-success">Paid</span></td>
+														<td>12 August 2022</td>
+														<td>$100</td>
+														<td>#42317</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic7.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Bradley Greer</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>11 July 2022</td>
+														<td>$200</td>
+														<td>#54682</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic8.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Cedric Kelly</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>10 May 2022</td>
+														<td>$400</td>
+														<td>#57894</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic10.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Caesar Vance</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>09 April 2022</td>
+														<td>$300</td>
+														<td>#57864</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic9.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Rhona Davidson</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>08 March 2022</td>
+														<td>$500</td>
+														<td>#56387</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div id="profile-settings" class="tab-pane fade">
+										<div class="table-responsive">
+											<table class="table table-responsive-md">
+												<thead>
+													<tr>
+														<th scope="col">#</th>
+														<th scope="col">Name</th>
+														<th scope="col">Status</th>
+														<th scope="col">Date</th>
+														<th scope="col">Ammount</th>
+														<th scope="col">Transaction ID</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td><img src="../static/images/profile/pic5.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Angelica Ramos</td>
+														<td><span class="badge badge-rounded badge-success">Paid</span></td>
+														<td>12 August 2022</td>
+														<td>$100</td>
+														<td>#42317</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic8.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Bradley Greer</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>11 July 2022</td>
+														<td>$200</td>
+														<td>#54682</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic6.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Cedric Kelly</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>10 May 2022</td>
+														<td>$400</td>
+														<td>#57894</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic2.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Caesar Vance</td>
+														<td><span class="badge badge-rounded badge-danger">Unpaid</span></td>
+														<td>09 April 2022</td>
+														<td>$300</td>
+														<td>#57864</td>
+													</tr>
+													<tr>
+														<td><img src="../static/images/profile/pic7.jpg" class="rounded-circle" width="35" alt=""></td>
+														<td>Rhona Davidson</td>
+														<td><span class="badge badge-rounded badge-warning">Pending</span></td>
+														<td>08 March 2022</td>
+														<td>$500</td>
+														<td>#56387</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                    -->
+
+				</div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Halal Solutions</a> 2023</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+		<!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="../static/vendor/global/global.min.js"></script>
+	<script src="../static/js/deznav-init.js"></script>
+	<script src="../static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="../static/js/custom.min.js"></script>
+		
+    <!-- Chart Morris plugin files -->
+    <script src="../static/vendor/raphael/raphael.min.js"></script>
+    <script src="../static/vendor/morris/morris.min.js"></script>
+		
+	
+	<!-- Chart piety plugin files -->
+    <script src="../static/vendor/peity/jquery.peity.min.js"></script>
+	
+		<!-- Demo scripts -->
+    <script src="../static/js/dashboard/dashboard-2.js"></script>
+	
+	<!-- Svganimation scripts -->
+    <script src="../static/vendor/svganimation/vivus.min.js"></script>
+    <script src="../static/vendor/svganimation/svg.animation.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,126 @@
+{% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>All Trainees</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_trainees') }}">Trainees</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_trainees') }}">All Trainees</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<ul class="nav nav-pills mb-3">
+							<li class="nav-item"><a href="#list-view" data-bs-toggle="tab" class="nav-link btn-primary me-1 show active">List View</a></li>
+							<li class="nav-item"><a href="#grid-view" data-bs-toggle="tab" class="nav-link btn-primary">Grid View</a></li>
+						</ul>
+					</div>
+					<div class="col-lg-12">
+						<div class="row tab-content">
+							<div id="list-view" class="tab-pane fade active show col-lg-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">All Trainees  </h4>
+										<a href="{{ url_for('add_trainee') }}" class="btn btn-primary">+ Add new</a>
+									</div>
+									<div class="card-body">
+										<div class="table-responsive">
+											<table id="example3" class="display table" style="min-width: 100%">
+												<thead>
+													<tr>
+
+														<th class="p-0">Name</th>
+														<th class="d-none d-md-table-cell p-0">Department</th>
+														<th class="d-none d-md-table-cell p-0">Gender</th>
+														<th class="p-0">Course</th>
+														<th class="d-none d-md-table-cell p-0">Admission Date</th>
+														<th class="d-none d-md-table-cell p-0">Email</th>
+
+														<th class="p-0">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+                                                    {% for trainee in trainees %}
+													<tr>
+
+														<td class="p-0 py-2">{{ trainee.first_name }} {{ trainee.last_name }}</td>
+														<td class="p-0 py-2 d-none d-md-table-cell">{{ trainee.department }}</td>
+														<td class="p-0 py-2 d-none d-md-table-cell">{{ trainee.gender }}</td>
+														<td class="p-0 py-2">{{ trainee.course }}</td>
+														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ trainee.registration_date }}</strong></a></td>
+														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ trainee.email }}</strong></a></td>
+
+														<td class="p-0 py-2">
+															<a href="{{ url_for('edit_trainee', trainee_id=trainee.id) }}" class="btn btn-sm btn-primary"><i class="la la-pencil" ></i></a>
+															<a href="{{ url_for('delete_trainee', trainee_id=trainee.id) }}" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+														</td>												
+													</tr>
+                                                    {% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+                                </div>
+                            </div>
+							<div id="grid-view" class="tab-pane fade col-lg-12">
+								<div class="row">
+                                    {% for trainee in trainees %}
+									<div class="col-lg-4 col-md-6 col-sm-6 col-12">
+										<div class="card">
+											<div class="card-body">
+												<div class="text-center">
+
+													<h3 class="mt-4 mb-1">{{ trainee.first_name }}</h3>
+                                                    <h4 class="mt-1 mb-1">{{ trainee.last_name }}</h4>
+													<p class="text-muted">{{ trainee.course }}</p>
+													<ul class="list-group mb-3 list-group-flush">
+														<li class="list-group-item px-0 d-flex justify-content-between">
+															<span class="mb-0">Gender :</span><strong>{{ trainee.gender }}</strong></li>
+														<li class="list-group-item px-0 d-flex justify-content-between">
+															<span class="mb-0">Phone No. :</span><strong>{{ trainee.mobile_number }}</strong></li>
+														<li class="list-group-item px-0 d-flex justify-content-between">
+															<span class="mb-0">Email:</span><strong>{{ trainee.email }}</strong></li>
+														<li class="list-group-item px-0 d-flex justify-content-between">
+															<span class="mb-0">Department:</span><strong>{{ trainee.department }}</strong></li>
+													</ul>
+
+												</div>
+											</div>
+										</div>
+									</div>
+                                    {% endfor %}
+
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

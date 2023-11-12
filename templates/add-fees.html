@@ -1,0 +1,131 @@
+        {% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+				<div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Fees</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('fees_collection') }}">Fees</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('add_fees') }}">Add Fees</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-xl-12 col-xxl-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+								<h5 class="card-title">Add Fees</h5>
+							</div>
+							<div class="card-body">
+                                <form action="{{ url_for('add_fees') }}" method="post">
+									<div class="row">
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Trainee</label>
+												<select name="trainee_name" class="form-control" id="traineeSelect">
+													<option value=""></option>
+                                                    {% for trainee in trainees %}
+													<option data-trainee-id="{{ trainee.id }}" value="{{ trainee.first_name }} {{ trainee.last_name }}">{{ trainee.first_name }} {{ trainee.last_name }}</option>
+													{% endfor %}
+												</select>
+                                                 <!-- Hidden input field to store selected trainee ID -->
+                                                <input type="hidden" name="selected_trainee_id" id="selectedTraineeId">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Department</label>
+												<select name="department" class="form-control">
+													<option value=""></option>
+                                                    {% for department in departments %}
+													<option value="{{ department.department_name }}">{{ department.department_name }}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group mb-4">
+												<label class="form-label">Course</label>
+												<select name="course" class="form-control">
+													<option value=""></option>
+                                                    {% for course in courses %}
+													<option value="{{ course.course_name }}">{{ course.course_name }}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Amount</label>
+												<input name="amount" type="number" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group mb-4">
+												<label class="form-label">Payment Date</label>
+												<input type="date" name="payment_date" class=" form-control" id="datepicker">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group mb-4">
+												<label class="form-label">Payment Type</label>
+												<select name="payment_type" class="form-control">
+													<option value=""></option>
+													<option value="Cash">Cash</option>
+													<option value="Transfer">Transfer</option>
+                                                    <option value="Online Payment">Online Payment</option>
+
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group mb-4">
+												<label class="form-label">Status</label>
+												<select name="payment_status" class="form-control">
+													<option value=""></option>
+													<option value="Paid">Paid</option>
+													<option value="Unpaid">Unpaid</option>
+													<option value="Pending">Pending</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<button href="{{ url_for('add_fees') }}" type="submit" class="btn btn-primary">Submit</button>
+											<button href="{{ url_for('fees_collection') }}" type="submit" class="btn btn-light">Cencel</button>
+										</div>
+									</div>
+								</form>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

@@ -1,0 +1,104 @@
+        {% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Course Details</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_courses') }}">Courses</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('about_course', course_id=course_to_display.id) }}">Course Details</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('edit_course', course_id=course_to_display.id) }}">Edit This Course</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-xl-3 col-xxl-4 col-lg-4">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="card">
+									<img class="img-fluid" src="../static/uploads/{{ course_to_display.image_name }}" alt="">
+									<div class="card-body">
+										<h4 class="mb-0">{{ course_to_display.course_name }}</h4>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<div class="card">
+
+									<div class="card-body pb-0">
+
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item d-flex px-0 justify-content-between">
+												<strong>Duration</strong>
+												<span class="mb-0">{{ course_to_display.course_duration }}</span>
+											</li>
+											<li class="list-group-item d-flex px-0 justify-content-between">
+												<strong>Facilitator</strong>
+												<span class="mb-0">{{ course_to_display.facilitator_name }}</span>
+											</li>
+											<li class="list-group-item d-flex px-0 justify-content-between">
+												<strong>Price</strong>
+												<span class="mb-0">₦ {{ course_to_display.course_price }}</span>
+											</li>
+
+										</ul>
+									</div>
+									<div class="card-footer pt-0 pb-0 text-center">
+										<div class="row">
+
+											<div class="col pt-3 pb-3 border-right">
+												<h3 class="mb-1 text-primary">{{ course_to_display.students_enrolled }}</h3>
+												<span>Students Taught</span>
+
+											</div>
+
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-9 col-xxl-8 col-lg-8">
+						<div class="card">
+							<div class="card-body">
+                                <h4 class="text-primary">Courses Information</h4>
+								<p>{{ course_to_display.course_details }}</p>
+
+								<div class="profile-lang pt-5 border-bottom-1 pb-5">
+									<h4 class="text-primary mb-4">Language</h4><a href="javascript:void()" class="text-muted pe-3 f-s-16"><i class="flag-icon flag-icon-us"></i> English</a>
+								</div>
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+				
+            </div>
+        </div>
+
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

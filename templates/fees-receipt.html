@@ -1,0 +1,150 @@
+        {% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Fees Receipt</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('fees_collection') }}">Fees</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('fees_receipt', fee_id=fee.id) }}">Fees Receipt</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row" id="ReceiptDiv">
+
+                    <div class="col-lg-12">
+
+                        <div class="card mt-3">
+                            <img id="PaidImg" src="../static/images/paid-large.png" alt="">
+
+                            <div class="card-header"> Receipt <strong> <img src="../static/images/logo.png" alt=""></strong> <span class="float-end">
+                                    <strong>Status:</strong> {{ fee.payment_status }}</span> </div>
+                            <div class="card-body">
+                                <div class="row mb-5">
+                                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <h6>From:</h6>
+                                        <div> <strong>{{ fee.trainee_name }}</strong> </div>
+
+                                        <div>{{ trainee.address }}</div>
+                                        <div>Email: {{ trainee.email }}</div>
+                                        <div>Phone: {{ trainee.mobile_number }}</div>
+                                    </div>
+                                    {% if fee.payment_type == 'Cash' %}
+                                    <div class="text-start mt-4 col-xl-6 text-end col-lg-6 col-md-6 col-sm-12">
+                                        <h6>To:</h6>
+                                        <div> <strong>Abubakr Umar Cashier</strong> </div>
+
+                                        <div>PMB: 28890 Center For Entrepreneurship Development</div>
+                                        <div>Usman Danfodiyo University Sokoto</div>
+                                        <div>Email: cedudus@udus.com</div>
+                                        <div>Phone: 08038659891</div>
+                                    </div>
+                                    {% elif fee.payment_type == 'Transfer' %}
+                                    <div class="text-start mt-4 col-xl-6 text-end col-lg-6 col-md-6 col-sm-12">
+                                        <h6>To:</h6>
+                                        <div> <strong>CED UDUS</strong> </div>
+
+                                        <div>Bank: GT Bank</div>
+                                        <div>Account: 0198608849</div>
+                                        <div>Email: cedudus@udus.com</div>
+                                        <div>Phone: 08038659891</div>
+                                    </div>
+                                    {% elif fee.payment_type == 'Online Payment' %}
+                                    <div class="text-start mt-4 col-xl-6 text-end col-lg-6 col-md-6 col-sm-12">
+                                        <h6>To:</h6>
+                                        <div> <strong>Barter Online Payment</strong> </div>
+
+                                        <div>Bank: Barter</div>
+                                        <div>Account: 8878960805</div>
+                                        <div>Email: cedudus@udus.com</div>
+                                        <div>Phone: 08038659891</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="table-responsive-sm">
+                                    <table class="table table-striped mb-1">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Payment Type</th>
+                                                <th>Course</th>
+                                                <th class="right">Invoice number</th>
+                                                <th class="center">Date</th>
+                                                <th class="right">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+
+                                                <td class="left strong">{{ fee.payment_type }}</td>
+                                                <td class="left">{{ fee.course }}</td>
+                                                <td class="right">#{{ fee.invoice_number }}</td>
+                                                <td class="center">{{ fee.payment_date }}</td>
+                                                <td class="right">₦{{ fee.amount }}</td>
+                                            </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row mt-0">
+                                    <div class="col-lg-4 col-sm-5"> </div>
+                                    <div class="col-lg-4 col-sm-5 ms-auto">
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="left"><strong>Subtotal</strong></td>
+                                                    <td class="right">₦{{ fee.amount + 200 }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="left"><strong>Discount</strong></td>
+                                                    <td class="right">₦200</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="left"><strong>VAT (10%)</strong></td>
+                                                    <td class="right">₦{{ fee.amount * 0.10 }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="left"><strong>Total</strong></td>
+                                                    <td class="right"><strong>₦{{ fee.amount }}</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+								<div class="row">
+									<div class="col-lg-12 text-end">
+										<a href="{{ url_for('edit_fee', fee_id=fee.id) }}" class="btn btn-primary" type="submit" id="Tohide"> Proceed to payment </a>
+										<button id="TohideToo" onclick="printDiv('ReceiptDiv')" class="btn btn-light" type="button"> <i class="fas fa-print"></i> Print </button>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+					
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

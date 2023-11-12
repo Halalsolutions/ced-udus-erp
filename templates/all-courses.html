@@ -1,0 +1,60 @@
+{% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>All Courses</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_courses') }}">Courses</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('all_courses') }}">All Courses</a></li>
+                        </ol>
+                    </div>
+                </div>
+
+				<div class="row">
+                    {% for course in courses %}
+					<div class="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6">
+						<div class="card">
+							<img class="img-fluid" src="../static/uploads/{{ course.image_name }}" alt="">
+							<div class="card-body">
+								<h4>{{ course.course_name }}</h4>
+								<ul class="list-group mb-3 list-group-flush">
+
+									<li class="list-group-item px-0 d-flex justify-content-between">
+										<span class="mb-0">Duration :</span><strong>{{ course.course_duration }}</strong></li>
+									<li class="list-group-item px-0 d-flex justify-content-between">
+										<span class="mb-0">Professor :</span><strong>{{ course.facilitator_name }}</strong></li>
+									<li class="list-group-item px-0 d-flex justify-content-between">
+										<span><i class="fas fa-graduation-cap text-primary me-2"></i>Student Taught</span><strong>{{ course.students_enrolled }}+</strong></li>
+								</ul>
+								<a href="{{ url_for('about_course', course_id=course.id) }}" class="btn btn-primary">Read More</a>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+
+				</div>
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

@@ -1,0 +1,81 @@
+{% include "header.html" %}
+
+        {% include "sidebar.html" %}
+
+		
+		
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Edit Departments</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('departments') }}">Departments</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('edit_department', department_id=department_to_edit.id) }}">Edit Departments</a></li>
+                        </ol>
+                    </div>
+                </div>
+				
+				<div class="row">
+					<div class="col-xl-12 col-xxl-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+								<h5 class="card-title">Edit Department</h5>
+							</div>
+							<div class="card-body">
+                                <form action="{{ url_for('edit_department', department_id=department_to_edit.id) }}" method="post">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Department Name</label>
+												<input required value="{{ department_to_edit.department_name }}" name="department_name" type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Head Of Department</label>
+												<input required value="{{ department_to_edit.department_head }}" name="department_head" type="text" class="form-control">
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Department Head Number</label>
+												<input required value="{{ department_to_edit.mobile_number }}" name="mobile_number" type="text" class="form-control">
+											</div>
+										</div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Department Head Email</label>
+												<input required value="{{ department_to_edit.email }}" name="email" type="email" class="form-control">
+											</div>
+										</div>
+
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<button href="{{ url_for('edit_department') }}" type="submit" class="btn btn-primary">Submit</button>
+											<button href="{{ url_for('departments') }}" type="submit" class="btn btn-light">Cencel</button>
+										</div>
+									</div>
+								</form>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        {% include "footer.html" %}

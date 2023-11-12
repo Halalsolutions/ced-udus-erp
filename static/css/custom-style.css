@@ -1,0 +1,58 @@
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 7px;
+}
+
+.dataTables_wrapper .dataTables_paginate a.next {
+  margin: 0 0 0 5px;
+}
+
+.dataTables_wrapper .dataTables_paginate a.previous {
+  margin: 0 5px 0 0;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  float: right;
+    margin-right: 35px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .dataTables_wrapper .dataTables_paginate {
+    margin-right: 20px;
+  }
+}
+
+.dataTables_wrapper .dataTables_paginate a.paginate_button {
+  cursor: pointer;
+}
+
+#PaidImg {
+    width: 40%;
+    position: absolute;
+    z-index: 50;
+    bottom: 30px;
+    left: 100px;
+    visibility: hidden;
+}
+
+@media print {
+            #Tohide {
+                visibility: hidden;
+            }
+
+            #TohideToo {
+                visibility: hidden;
+            }
+
+            #PaidImg {
+                visibility: visible;
+            }
+
+            /* Remove default browser headers and footers */
+            @page {
+                size: auto;
+                margin: 0mm;
+            }
+        }
+
+
