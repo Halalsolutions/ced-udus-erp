@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, redirect, flash
+from flask import Flask, request, render_template, url_for, redirect, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_toastr import Toastr
 from flask_sqlalchemy import SQLAlchemy
@@ -128,6 +128,11 @@ class Fee(db.Model):
     amount = db.Column(db.Integer)
 
 
+class Event(db.Model):
+    __tablename__ = 'events'
+    id = db.Column(db.Integer, primary_key=True)
+    event_name = db.Column(db.String(250))
+    event_date = db.Column(db.Date)
 
 
 
@@ -773,11 +778,37 @@ def edit_fee():
 def error_404():
     return render_template('page-error-404.html')
 
-@app.route('/event-management')
+@app.route('/event-management', methods=['GET', 'POST'])
 @login_is_required
 def event_management():
+    events = Event.query.all()
+    if request.method == 'POST':
+        date = to_date_obj(request.form.get('event_date'))
+        new_event = Event(event_name=request.form.get('event_name'),
+                          event_date=date)
+        db.session.add(new_event)
+        db.session.commit()
+        flash('Event Added', 'success')
+        return redirect(url_for('event_management'))
+    return render_template('event-management.html', events=events)
 
-    return render_template('event-management.html')
+@app.route('/get_events')
+def get_events():
+    # Query events from the database
+    events = Event.query.all()
+
+    # Convert events to FullCalendar-compatible format
+    formatted_events = []
+    for event in events:
+        formatted_events.append({
+            'id': event.id,
+            'title': event.event_name,
+            'start': event.event_date.strftime('%Y-%m-%d'),
+            'end': event.event_date.strftime('%Y-%m-%d'),
+            'description': event.event_name
+        })
+
+    return jsonify(formatted_events)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

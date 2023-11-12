@@ -56,3 +56,7 @@
         }
 
 
+/* Add this CSS to your styles */
+.fc-event {
+    cursor: pointer !important;
+}
