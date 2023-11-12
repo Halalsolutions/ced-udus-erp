@@ -65,10 +65,10 @@
 					<div class="col-xl-6 col-xxl-6 col-sm-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Income/Expense Report</h3>
+								<h3 class="card-title">Monthly Income/Expense Report</h3>
 							</div>
 							<div class="card-body">
-								 <div id="morris_bar_2" class="morris_chart_height"></div>
+								 <div id="income-expenses-chart" class="morris_chart_height"></div>
 							</div>
 						</div>
 					</div>
@@ -395,6 +395,27 @@
 	<!-- Svganimation scripts -->
     <script src="../static/vendor/svganimation/vivus.min.js"></script>
     <script src="../static/vendor/svganimation/svg.animation.js"></script>
-	
+
+
+    <script>
+        var incomeData = {{ income_data|tojson|safe }};
+    var expenseData = {{ expense_data|tojson|safe }};
+
+    var monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    Morris.Line({
+        element: 'income-expenses-chart',
+        data: incomeData.concat(expenseData),
+        xkey: 'month',  // Assuming 'month' is a numeric value representing the month
+        ykeys: ['total_income', 'total_expenses'],
+        labels: ['Total Income', 'Total Expenses'],
+        parseTime: false,
+        xLabelFormat: function(x) {
+            return monthNames[parseInt(x, 10)];
+        }
+    });
+    </script>
+
+
 </body>
 </html>

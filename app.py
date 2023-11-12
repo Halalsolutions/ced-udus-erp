@@ -20,7 +20,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('database_uri')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -172,6 +172,29 @@ def calculate_fees_percentage_increased(trainees):
     percentage_increase = ((current_month_trainees - last_month_trainees) / last_month_trainees) * 100
     return f"{percentage_increase:.2f}% increase from last month"
 
+# get income expense data for moris chart by month
+def get_monthly_income_expense_data():
+    # calculate total income by month
+    income_data = db.session.query(func.extract('month', Fee.payment_date).label('month'),
+                                   func.sum(Fee.amount).label('total_income')
+                                   ).group_by(func.extract('month', Fee.payment_date)).all()
+
+    # calculate total expenses by month
+    expense_data = db.session.query(func.extract('month', InventoryItem.purchase_date).label('month'),
+                                    func.sum(InventoryItem.price).label('total_expenses')
+                                    ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
+
+    # Convert the result to a list of dictionaries
+    income_data = [{'month': month, 'total_income': total_income} for month, total_income in income_data]
+    expense_data = [{'month': month, 'total_expenses': total_expenses} for month, total_expenses in expense_data]
+
+    return income_data, expense_data
+
+# covert string date to date ob
+def to_date_obj(date):
+    payment_date_str = date
+    payment_date_obj = datetime.strptime(payment_date_str, '%Y-%m-%d')
+    return payment_date_obj
 # Functions t check current user
 def check_login_status():
     if not current_user.is_authenticated:
@@ -200,6 +223,7 @@ def login_or_dashboard():
 @app.route('/dashboard')
 @login_is_required
 def home():
+    income_data, expense_data = get_monthly_income_expense_data()
 
     current_month = datetime.now().month
 
@@ -236,7 +260,9 @@ def home():
                            fees_collected=total_amount,
                            fee_percentage_increase=fee_percentage_increase,
                            all_facilitators=all_facilitators,
-                           all_trainees=all_trainees)
+                           all_trainees=all_trainees,
+                           income_data=income_data,
+                           expense_data=expense_data)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -294,10 +320,13 @@ def add_facilitator():
 
     departments = Department.query.all()
     if request.method == 'POST':
+
+        date = to_date_obj(request.form.get('joining_date'))
+
         new_facilitator = Facilitator(first_name=request.form.get('first_name'),
                                       last_name=request.form.get('last_name'),
                                       email=request.form.get('email'),
-                                      joining_date=request.form.get('joining_date'),
+                                      joining_date=date,
                                       mobile_number=request.form.get('mobile_number'),
                                       gender=request.form.get('gender'),
 
@@ -313,13 +342,17 @@ def add_facilitator():
 @login_is_required
 def edit_facilitator():
 
+
     facilitator_to_edit = Facilitator.query.get(request.args.get('facilitator_id'))
     departments = Department.query.all()
     if request.method == 'POST':
+
+        date = to_date_obj(request.form.get('joining_date'))
+
         facilitator_to_edit.first_name = request.form.get('first_name')
         facilitator_to_edit.last_name = request.form.get('last_name')
         facilitator_to_edit.email = request.form.get('email')
-        facilitator_to_edit.joining_date = request.form.get('joining_date')
+        facilitator_to_edit.joining_date = date
         facilitator_to_edit.mobile_number = request.form.get('mobile_number')
         facilitator_to_edit.gender = request.form.get('gender')
 
@@ -362,12 +395,14 @@ def add_trainee():
     if request.method == 'POST':
         course_to_increment = Course.query.filter_by(course_name=request.form.get('course')).first()
 
+        date = to_date_obj(request.form.get('registration_date'))
+
         print(course_to_increment)
         print(request.form.get('course'))
         new_trainee = Trainee(first_name=request.form.get('first_name'),
                               last_name=request.form.get('last_name'),
                               email=request.form.get('email'),
-                              registration_date=request.form.get('registration_date'),
+                              registration_date=date,
                               department=request.form.get('department'),
                               course=request.form.get('course'),
                               gender=request.form.get('gender'),
@@ -387,10 +422,12 @@ def edit_trainee():
 
     trainee_to_edit = Trainee.query.get(request.args.get('trainee_id'))
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('registration_date'))
+
         trainee_to_edit.first_name = request.form.get('first_name')
         trainee_to_edit.last_name = request.form.get('last_name')
         trainee_to_edit.email = request.form.get('email')
-        trainee_to_edit.registration_date = request.form.get('registration_date')
+        trainee_to_edit.registration_date = date
         trainee_to_edit.department = request.form.get('department')
         trainee_to_edit.course = request.form.get('course')
         trainee_to_edit.gender = request.form.get('gender')
@@ -490,11 +527,13 @@ def add_to_inventory():
     courses = Course.query.all()
     departments = Department.query.all()
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('purchase_date'))
+
         new_item = InventoryItem(item_name=request.form.get('item_name'),
                                  price=request.form.get('item_price'),
                                  department_for=request.form.get('department_for'),
                                  course_for=request.form.get('course_for'),
-                                 purchase_date=request.form.get('purchase_date'),
+                                 purchase_date=date,
                                  status=request.form.get('item_status'),
                                  item_details=request.form.get('item_details')
                                  )
@@ -512,11 +551,13 @@ def edit_inventory_item():
     departments = Department.query.all()
     item_to_edit = InventoryItem.query.get(request.args.get('item_id'))
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('purchase_date'))
+
         item_to_edit.item_name = request.form.get('item_name')
         item_to_edit.price = request.form.get('item_price')
         item_to_edit.department_for = request.form.get('department_for')
         item_to_edit.course_for = request.form.get('course_for')
-        item_to_edit.purchase_date = request.form.get('purchase_date')
+        item_to_edit.purchase_date = date
         item_to_edit.status = request.form.get('item_status')
         item_to_edit.item_details = request.form.get('item_details')
         db.session.commit()
@@ -595,10 +636,12 @@ def add_staff():
 
     departments = Department.query.all()
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('joining_date'))
+
         new_staff = Staff(first_name=request.form.get('first_name'),
                           last_name=request.form.get('last_name'),
                           email=request.form.get('email'),
-                          joining_date=request.form.get('joining_date'),
+                          joining_date=date,
                           mobile_number=request.form.get('mobile_number'),
                           gender=request.form.get('gender'),
                           designation=request.form.get('designation'),
@@ -618,10 +661,12 @@ def edit_staff():
     departments = Department.query.all()
     staff_to_edit = Staff.query.get(request.args.get('staff_id'))
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('joining_date'))
+
         staff_to_edit.first_name = request.form.get('first_name')
         staff_to_edit.last_name = request.form.get('last_name')
         staff_to_edit.email = request.form.get('email')
-        staff_to_edit.joining_date = request.form.get('joining_date')
+        staff_to_edit.joining_date = date
         staff_to_edit.mobile_number = request.form.get('mobile_number')
         staff_to_edit.gender = request.form.get('gender')
         staff_to_edit.designation = request.form.get('designation')
@@ -663,12 +708,14 @@ def add_fees():
     departments = Department.query.all()
     courses = Course.query.all()
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('payment_date'))
+
         new_fee = Fee(trainee_name=request.form.get('trainee_name'),
                       trainee_id=request.form['selected_trainee_id'],
                       department=request.form.get('department'),
                       course=request.form.get('course'),
                       amount=request.form.get('amount'),
-                      payment_date=request.form.get('payment_date'),
+                      payment_date=date,
                       payment_type=request.form.get('payment_type'),
                       payment_status=request.form.get('payment_status')
                       )
@@ -697,11 +744,13 @@ def edit_fee():
     courses = Course.query.all()
     fee_to_edit = Fee.query.get(request.args.get('fee_id'))
     if request.method == 'POST':
+        date = to_date_obj(request.form.get('payment_date'))
+
         fee_to_edit.trainee_name = request.form.get('trainee_name')
         fee_to_edit.department = request.form.get('department')
         fee_to_edit.course = request.form.get('course')
         fee_to_edit.amount = request.form.get('amount')
-        fee_to_edit.payment_date = request.form.get('payment_date')
+        fee_to_edit.payment_date = date
         fee_to_edit.payment_type = request.form.get('payment_type')
         fee_to_edit.payment_status = request.form.get('payment_status')
         db.session.commit()
