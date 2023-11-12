@@ -76,6 +76,7 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <!--
                                             <div class="col-lg-6 col-md-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label class="form-label">Course</label>
@@ -88,21 +89,21 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            -->
                                             <div class="col-lg-6 col-md-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label class="form-label">Department</label>
                                                     <select name="department" class="form-control" required>
                                                         <option value=""></option>
-                                                        <option value="html">HTML</option>
-                                                        <option value="css">CSS</option>
-                                                        <option value="javascript">JavaScript</option>
-                                                        <option value="angular">Angular</option>
+                                                        {% for department in departments %}
+                                                        <option value="{{ department.department_name }}">{{ department.department_name }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <button href="{{ url_for('all_facilitators') }}" type="submit" class="btn btn-primary">Submit</button>
-                                                <a href="{{ url_for('home') }}" class="btn btn-light">Cencel</a>
+                                                <a href="{{ url_for('home') }}" class="btn btn-light">Cancel</a>
                                             </div>
                                         </form>
 									</div>

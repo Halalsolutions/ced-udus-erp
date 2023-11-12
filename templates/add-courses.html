@@ -66,12 +66,19 @@
 												<input name="course_price" type="text" class="form-control" required>
 											</div>
 										</div>
-										<div class="col-lg-6 col-md-6 col-sm-12">
-											<div class="form-group">
-												<label class="form-label">Facilitator</label>
-												<input name="facilitator" type="text" class="form-control" required>
-											</div>
-										</div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Facilitator</label>
+                                                    <select name="facilitator" class="form-control" required>
+                                                        <option value=""></option>
+                                                        {% for facilatator in facilitators %}
+                                                        <option value="{{ facilatator.first_name }} {{ facilatator.last_name }}">{{ facilatator.first_name }} {{ facilatator.last_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                        </div>
+
+
 
 
 										<div class="col-lg-12 col-md-12 col-sm-12">

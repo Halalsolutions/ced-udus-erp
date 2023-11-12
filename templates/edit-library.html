@@ -54,9 +54,9 @@
 												<label class="form-label">Department For</label>
 												<select required name="department_for" class="form-control">
 													<option value=""></option>
-													<option {% if item_to_edit.department_for == 'Computer' %}selected{% endif %} value="Computer">Computer</option>
-													<option {% if item_to_edit.department_for == 'DataEntry' %}selected{% endif %} value="DataEntry">Data Entry</option>
-													<option {% if item_to_edit.department_for == 'Management' %}selected{% endif %} value="Management">Management</option>
+                                                    {% for department in departments %}
+													<option {% if item_to_edit.department_for == department.department_name %}selected{% endif %} value="{{ department.department_name }}">{{ department.department_name }}</option>
+													{% endfor %}
 												</select>
 											</div>
 										</div>
@@ -65,9 +65,9 @@
 												<label class="form-label">Course For</label>
 												<select required name="course_for" class="form-control">
 													<option value=""></option>
-													<option {% if item_to_edit.course_for == 'Computer' %}selected{% endif %} value="Computer">Book</option>
-													<option {% if item_to_edit.course_for == 'DataEntry' %}selected{% endif %} value="DataEntry">Newspaper</option>
-													<option {% if item_to_edit.course_for == 'Management' %}selected{% endif %} value="Management">Comics</option>
+                                                    {% for course in courses %}
+													<option {% if item_to_edit.course_for == course.course_name %}selected{% endif %} value="{{ course.course_name }}">{{ course.course_name }}</option>
+													{% endfor %}
 												</select>
 											</div>
 										</div>

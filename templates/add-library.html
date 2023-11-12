@@ -54,9 +54,9 @@
 												<label class="form-label">Department For</label>
 												<select required name="department_for" class="form-control">
 													<option value=""></option>
-													<option value="Computer">Computer</option>
-													<option value="DataEntry">Data Entry</option>
-													<option value="Management">Management</option>
+                                                    {% for department in departments %}
+													<option value="{{ department.department_name }}">{{ department.department_name }}</option>
+													{% endfor %}
 												</select>
 											</div>
 										</div>
@@ -65,9 +65,9 @@
 												<label class="form-label">Course For</label>
 												<select required name="course_for" class="form-control">
 													<option value=""></option>
-													<option value="Computer">Book</option>
-													<option value="DataEntry">Newspaper</option>
-													<option value="Management">Comics</option>
+                                                    {% for course in courses %}
+													<option value="{{ course.course_name }}">{{ course.course_name }}</option>
+													{% endfor %}
 												</select>
 											</div>
 										</div>

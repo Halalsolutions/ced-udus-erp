@@ -13,13 +13,13 @@ app = Flask(__name__)
 
 
 # Flask Configurations
-app.secret_key = 'sfbdknksghrjenjkh3642342uyhGTYGU'
+app.secret_key = os.environ.get('secret_key')
 toastr = Toastr(app)
 app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///halal_tasks.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -50,7 +50,7 @@ class Facilitator(db.Model):
     joining_date = db.Column(db.String(250))
     mobile_number = db.Column(db.Integer)
     gender = db.Column(db.String(50), nullable=False)
-    course = db.Column(db.String(250), nullable=False)
+    course = db.Column(db.String(250))
     department = db.Column(db.String(250), nullable=False)
 
 class Trainee(db.Model):
@@ -172,6 +172,13 @@ def calculate_fees_percentage_increased(trainees):
     return f"{percentage_increase:.2f}% increase from last month"
 
 @app.route('/')
+def login_or_dashboard():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/dashboard')
 def home():
     current_month = datetime.now().month
 
@@ -210,14 +217,48 @@ def home():
                            all_facilitators=all_facilitators,
                            all_trainees=all_trainees)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-
+    if request.method == 'POST':
+        new_user = User(first_name=request.form.get('first_name'),
+                        last_name=request.form.get('last_name'),
+                        email=request.form.get('email'),
+                        password=request.form.get('password'),
+                        avatar_location='../static/images/profile-photo.png')
+        db.session.add(new_user)
+        db.session.commit()
+        login_user(new_user)
+        flash('Welcome To Center For Entrepreneurship Development UDUSOK')
+        return redirect(url_for('home'))
     return render_template('page-register.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+
+        if user is not None:
+            if password == user.password:
+                login_user(user)
+                flash('Login Successful', 'success')
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid Password', 'error')
+                return redirect(url_for('login'))
+        else:
+            flash('User not Found', 'error')
+            return redirect(url_for('login'))
     return render_template('page-login.html')
+
+@app.route('/logout')
+def logout():
+    first_name = current_user.first_name
+    last_name = current_user.last_name
+    logout_user()
+    flash(f'{first_name} {last_name} Logout Successful')
+    return redirect(url_for('login'))
 
 @app.route("/all-facilitators")
 def all_facilitators():
@@ -226,6 +267,7 @@ def all_facilitators():
 
 @app.route("/add-facilitator", methods=['GET', 'POST'])
 def add_facilitator():
+    departments = Department.query.all()
     if request.method == 'POST':
         new_facilitator = Facilitator(first_name=request.form.get('first_name'),
                                       last_name=request.form.get('last_name'),
@@ -233,18 +275,19 @@ def add_facilitator():
                                       joining_date=request.form.get('joining_date'),
                                       mobile_number=request.form.get('mobile_number'),
                                       gender=request.form.get('gender'),
-                                      course=request.form.get('course'),
+
                                       department=request.form.get('department')
                                       )
         db.session.add(new_facilitator)
         db.session.commit()
         flash("Facilitator Added Successfully", "success")
         return redirect(url_for('all_facilitators'))
-    return render_template('add-professor.html')
+    return render_template('add-professor.html', departments=departments)
 
 @app.route("/edit-facilitator", methods=['GET', 'POST'])
 def edit_facilitator():
     facilitator_to_edit = Facilitator.query.get(request.args.get('facilitator_id'))
+    departments = Department.query.all()
     if request.method == 'POST':
         facilitator_to_edit.first_name = request.form.get('first_name')
         facilitator_to_edit.last_name = request.form.get('last_name')
@@ -252,12 +295,12 @@ def edit_facilitator():
         facilitator_to_edit.joining_date = request.form.get('joining_date')
         facilitator_to_edit.mobile_number = request.form.get('mobile_number')
         facilitator_to_edit.gender = request.form.get('gender')
-        facilitator_to_edit.course = request.form.get('course')
+
         facilitator_to_edit.department = request.form.get('department')
         db.session.commit()
         flash("Facilitator Edited Successfully", "success")
         return redirect(url_for('all_facilitators'))
-    return render_template('edit-professor.html', facilitator_to_edit=facilitator_to_edit)
+    return render_template('edit-professor.html', facilitator_to_edit=facilitator_to_edit, departments=departments)
 
 @app.route('/delete-facilitator')
 def delete_facilitator():
@@ -341,6 +384,7 @@ def all_courses():
 
 @app.route('/add-course', methods=['GET', 'POST'])
 def add_course():
+    facilitators = Facilitator.query.all()
     if request.method == 'POST':
         image_file = request.files['image']
         image_file_name = image_file.filename
@@ -361,10 +405,11 @@ def add_course():
         db.session.commit()
         flash("Course Added Successfully", "success")
         return redirect(url_for('all_courses'))
-    return render_template('add-courses.html')
+    return render_template('add-courses.html', facilitators=facilitators)
 
 @app.route('/edit-course', methods=['GET', 'POST'])
 def edit_course():
+    facilitators = Facilitator.query.all()
     course_to_edit = Course.query.get(request.args.get('course_id'))
     if request.method == 'POST':
         course_to_edit.course_name = request.form.get('course_name')
@@ -375,7 +420,7 @@ def edit_course():
         course_to_edit.facilitator_name = request.form.get('facilitator')
         flash('Course Edited Successfully', 'success')
         return redirect(url_for('all_courses'))
-    return render_template('edit-courses.html', course_to_edit=course_to_edit)
+    return render_template('edit-courses.html', course_to_edit=course_to_edit, facilitators=facilitators)
 
 @app.route('/about-course')
 def about_course():
@@ -389,6 +434,8 @@ def inventory():
 
 @app.route('/add-to-inventory', methods=['GET', 'POST'])
 def add_to_inventory():
+    courses = Course.query.all()
+    departments = Department.query.all()
     if request.method == 'POST':
         new_item = InventoryItem(item_name=request.form.get('item_name'),
                                  price=request.form.get('item_price'),
@@ -402,10 +449,12 @@ def add_to_inventory():
         db.session.commit()
         flash('New Item Added To Inventory', 'success')
         return redirect(url_for('inventory'))
-    return render_template('add-library.html')
+    return render_template('add-library.html', departments=departments, courses=courses)
 
 @app.route('/edit-inventory-item', methods=['GET', 'POST'])
 def edit_inventory_item():
+    courses = Course.query.all()
+    departments = Department.query.all()
     item_to_edit = InventoryItem.query.get(request.args.get('item_id'))
     if request.method == 'POST':
         item_to_edit.item_name = request.form.get('item_name')
@@ -418,7 +467,7 @@ def edit_inventory_item():
         db.session.commit()
         flash('Item Edited Successfully', 'success')
         return redirect(url_for('inventory'))
-    return render_template('edit-library.html', item_to_edit=item_to_edit)
+    return render_template('edit-library.html', item_to_edit=item_to_edit, departments=departments, courses=courses)
 
 @app.route('/delete-inventory-item')
 def delete_inventory_item():

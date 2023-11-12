@@ -31,21 +31,25 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <h4 class="text-center mb-4">Sign up your account</h4>
-                                    <form action="../static/index.html">
+                                    <form action="{{ url_for('register') }}" method="post">
                                         <div class="form-group">
-                                            <label><strong>Username</strong></label>
-                                            <input type="text" class="form-control" placeholder="username">
+                                            <label><strong>First Name</strong></label>
+                                            <input name="first_name" type="text" class="form-control" placeholder="username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label><strong>Last Name</strong></label>
+                                            <input name="last_name" type="text" class="form-control" placeholder="username">
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Email</strong></label>
-                                            <input type="email" class="form-control" placeholder="hello@example.com">
+                                            <input name="email" type="email" class="form-control" placeholder="hello@example.com">
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Password</strong></label>
-                                            <input type="password" class="form-control" value="Password">
+                                            <input name="password" type="password" class="form-control" value="Password">
                                         </div>
                                         <div class="text-center mt-4">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign me up</button>
+                                            <button href="{{ url_for('register') }}" type="submit" class="btn btn-primary btn-block">Sign me up</button>
                                         </div>
                                     </form>
                                     <div class="new-account mt-3">

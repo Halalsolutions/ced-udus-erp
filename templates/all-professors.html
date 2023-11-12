@@ -51,7 +51,7 @@
 														<th class="p-0">Name</th>
 														<th class="d-none d-md-table-cell p-0">Department</th>
 														<th class="d-none d-md-table-cell p-0">Gender</th>
-														<th class="p-0">Course</th>
+														<!--<th class="p-0">Course</th>-->
 														<th class="d-none d-md-table-cell p-0">Mobile</th>
 														<th class="d-none d-md-table-cell p-0">Email</th>
 
@@ -65,7 +65,7 @@
 														<td class="p-0 py-2">{{ facilitator.first_name }} {{ facilitator.last_name }}</td>
 														<td class="p-0 py-2 d-none d-md-table-cell">{{ facilitator.department }}</td>
 														<td class="p-0 py-2 d-none d-md-table-cell">{{ facilitator.gender }}</td>
-														<td class="p-0 py-2">{{ facilitator.course }}</td>
+														<!--<td class="p-0 py-2"></td>-->
 														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ facilitator.mobile_number }}</strong></a></td>
 														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ facilitator.email }}</strong></a></td>
 
@@ -91,7 +91,7 @@
 
 													<h3 class="mt-4 mb-1">{{ facilitator.first_name }}</h3>
                                                     <h4 class="mt-1 mb-1">{{ facilitator.last_name }}</h4>
-													<p class="text-muted">{{ facilitator.course }}</p>
+													<p class="text-muted">{{ facilitator.department }}</p>
 													<ul class="list-group mb-3 list-group-flush">
 														<li class="list-group-item px-0 d-flex justify-content-between">
 															<span class="mb-0">Gender :</span><strong>{{ facilitator.gender }}</strong></li>
@@ -100,7 +100,7 @@
 														<li class="list-group-item px-0 d-flex justify-content-between">
 															<span class="mb-0">Email:</span><strong>{{ facilitator.email }}</strong></li>
 														<li class="list-group-item px-0 d-flex justify-content-between">
-															<span class="mb-0">Department:</span><strong>{{ facilitator.department }}</strong></li>
+															<span class="mb-0">Joining Date:</span><strong>{{ facilitator.joining_date }}</strong></li>
 													</ul>
 
 												</div>
