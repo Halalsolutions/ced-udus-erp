@@ -45,9 +45,9 @@
 														<th class="p-0">Trainee Name</th>
 														<th class="d-none d-md-table-cell p-0">Invoice No.</th>
 														<th class="d-none d-md-table-cell p-0">Course</th>
-														<th class="p-0">Payment Type</th>
+														<th class="d-none d-md-table-cell p-0">Payment Type</th>
 														<th class="d-none d-md-table-cell p-0">Date</th>
-                                                        <th class="d-none d-md-table-cell p-0">Amount</th>
+                                                        <th class=" p-0">Amount</th>
 														<th class="d-none d-md-table-cell p-0">Status</th>
 
 														<th class="p-0">Action</th>
@@ -60,9 +60,9 @@
 														<td class="p-0 py-2">{{ fee.trainee_name }}</td>
 														<td class="p-0 py-2 d-none d-md-table-cell">#{{ fee.invoice_number }}</td>
 														<td class="p-0 py-2 d-none d-md-table-cell">{{ fee.course }}</td>
-														<td class="p-0 py-2">{{ fee.payment_type }}</td>
+														<td class="p-0 py-2 d-none d-md-table-cell">{{ fee.payment_type }}</td>
 														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ fee.payment_date }}</strong></a></td>
-														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ fee.amount }}</strong></a></td>
+														<td class="p-0 py-2 "><a href="javascript:void(0);"><strong>{{ fee.amount }}</strong></a></td>
                                                         <td class="p-0 py-2 d-none d-md-table-cell"><span
                                                                 {% if fee.payment_status == 'Paid' %}
                                                                 class="badge badge-success"

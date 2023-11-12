@@ -66,9 +66,9 @@
 
 
 														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ staff.mobile_number }}</strong></a></td>
-														<td class="p-0 py-2 d-none d-md-table-cell"><a href="javascript:void(0);"><strong>{{ staff.email }}</strong></a></td>
+														<td class="p-0 py-2 "><a href="javascript:void(0);"><strong>{{ staff.email }}</strong></a></td>
                                                         <td class="p-0 py-2 d-none d-md-table-cell">{{ staff.gender }}</td>
-                                                        <td class="p-0 py-2">{{ staff.department }}</td>
+                                                        <td class="p-0 py-2 d-none d-md-table-cell">{{ staff.department }}</td>
 														<td class="p-0 py-2">
 															<a href="{{ url_for('edit_staff', staff_id=staff.id) }}" class="btn btn-sm btn-primary"><i class="la la-pencil" ></i></a>
 															<a href="{{ url_for('delete_staff', staff_id=staff.id) }}" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
