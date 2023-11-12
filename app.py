@@ -21,7 +21,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('database_uri')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
