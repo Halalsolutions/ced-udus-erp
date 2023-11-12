@@ -19,7 +19,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://halalkharbouch:PjBKfQ7CTg85SqHusNoQeixfiY09tVWC@dpg-cl8h1etb7ptc73d98mu0-a.oregon-postgres.render.com/ced_udus_erp_db_3i7h'
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
