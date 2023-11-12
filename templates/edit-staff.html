@@ -88,9 +88,9 @@
 												<label class="form-label">Department</label>
 												<select required name="department" class="form-control">
 													<option value=""></option>
-													<option {% if staff_to_edit.department == 'html' %}selected{% endif %} value="html">HTML</option>
-													<option {% if staff_to_edit.department == 'css' %}selected{% endif %} value="css">CSS</option>
-													<option {% if staff_to_edit.department == 'javascript' %}selected{% endif %} value="javascript">JavaScript</option>
+                                                    {% for department in departments %}
+													<option {% if staff_to_edit.department == department.department_name %}selected{% endif %} value="{{ department.department_name }}">{{ department.department_name }}</option>
+													{% endfor %}
 
 												</select>
 											</div>

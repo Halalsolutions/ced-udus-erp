@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, url_for, redirect, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_toastr import Toastr
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, LargeBinary, event, func
+from sqlalchemy import Column, String, LargeBinary, event, func, cast, Date
 import os
 import uuid
 from datetime import datetime
@@ -19,7 +19,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://halalkharbouch:PjBKfQ7CTg85SqHusNoQeixfiY09tVWC@dpg-cl8h1etb7ptc73d98mu0-a.oregon-postgres.render.com/ced_udus_erp_db_3i7h'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -47,8 +47,8 @@ class Facilitator(db.Model):
     first_name = db.Column(db.String(250), nullable=False)
     last_name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(250))
-    joining_date = db.Column(db.String(250))
-    mobile_number = db.Column(db.Integer)
+    joining_date = db.Column(db.Date)
+    mobile_number = db.Column(db.String(255))
     gender = db.Column(db.String(50), nullable=False)
     course = db.Column(db.String(250))
     department = db.Column(db.String(250), nullable=False)
@@ -59,10 +59,10 @@ class Trainee(db.Model):
     first_name = db.Column(db.String(250), nullable=False)
     last_name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(250), nullable=False)
-    registration_date = db.Column(db.String(50), nullable=False)
+    registration_date = db.Column(db.Date, nullable=False)
     department = db.Column(db.String(250), nullable=False)
     gender = db.Column(db.String(250), nullable=False)
-    mobile_number = db.Column(db.Integer)
+    mobile_number = db.Column(db.String(255))
     course = db.Column(db.String(250), nullable=False)
     address = db.Column(db.String(250))
 
@@ -86,7 +86,7 @@ class InventoryItem(db.Model):
     course_for = db.Column(db.String(250), nullable=False)
     department_for = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    purchase_date = db.Column(db.String(250), nullable=False)
+    purchase_date = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(250), nullable=False)
     item_details = db.Column(db.Text, nullable=False)
 
@@ -95,7 +95,7 @@ class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     department_name = db.Column(db.String(250), nullable=False)
     department_head = db.Column(db.String(250))
-    mobile_number = db.Column(db.Integer)
+    mobile_number = db.Column(db.String(255))
     email = db.Column(db.String(250))
 
 class Staff(db.Model):
@@ -104,8 +104,8 @@ class Staff(db.Model):
     first_name = db.Column(db.String(250), nullable=False)
     last_name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(250))
-    joining_date = db.Column(db.String(250))
-    mobile_number = db.Column(db.Integer)
+    joining_date = db.Column(db.Date)
+    mobile_number = db.Column(db.String(255))
     gender = db.Column(db.String(250))
     designation = db.Column(db.String(250))
     department = db.Column(db.String(250))
@@ -121,7 +121,7 @@ class Fee(db.Model):
     course = db.Column(db.String(255))
     payment_type = db.Column(db.String(255))
     payment_status = db.Column(db.String(255))
-    payment_date = db.Column(db.String(255))
+    payment_date = db.Column(db.Date)
     amount = db.Column(db.Integer)
 
 
@@ -152,8 +152,8 @@ def calculate_total_amount():
 # claculate Students Increase Percentage
 def calculate_percentage_increased(trainees):
     current_month = datetime.now().month
-    last_month_trainees = Trainee.query.filter(func.extract('month', Trainee.registration_date) == current_month - 1).count()
-    current_month_trainees = Trainee.query.filter(func.extract('month', Trainee.registration_date) == current_month).count()
+    last_month_trainees = Trainee.query.filter(func.extract('month', cast(Trainee.registration_date, Date)) == current_month - 1).count()
+    current_month_trainees = Trainee.query.filter(func.extract('month', cast(Trainee.registration_date, Date)) == current_month).count()
     if last_month_trainees == 0:
         return "No Trainees Registered last month"
 
@@ -163,8 +163,8 @@ def calculate_percentage_increased(trainees):
 # claculate Fees Increase Percentage
 def calculate_fees_percentage_increased(trainees):
     current_month = datetime.now().month
-    last_month_trainees = Fee.query.filter(func.extract('month', Fee.payment_date) == current_month - 1).count()
-    current_month_trainees = Fee.query.filter(func.extract('month', Fee.payment_date) == current_month).count()
+    last_month_trainees = Fee.query.filter(func.extract('month', cast(Fee.payment_date, Date)) == current_month - 1).count()
+    current_month_trainees = Fee.query.filter(func.extract('month', cast(Fee.payment_date, Date)) == current_month).count()
     if last_month_trainees == 0:
         return "No Fees Were Collected last month"
 
@@ -524,6 +524,7 @@ def staff():
 
 @app.route('/add-staff', methods=['GET', 'POST'])
 def add_staff():
+    departments = Department.query.all()
     if request.method == 'POST':
         new_staff = Staff(first_name=request.form.get('first_name'),
                           last_name=request.form.get('last_name'),
@@ -539,10 +540,11 @@ def add_staff():
         db.session.commit()
         flash('Staff Added Successfully', 'success')
         return redirect(url_for('staff'))
-    return render_template('add-staff.html')
+    return render_template('add-staff.html', departments=departments)
 
 @app.route('/edit-staff', methods=['GET', 'POST'])
 def edit_staff():
+    departments = Department.query.all()
     staff_to_edit = Staff.query.get(request.args.get('staff_id'))
     if request.method == 'POST':
         staff_to_edit.first_name = request.form.get('first_name')
@@ -557,7 +559,7 @@ def edit_staff():
         db.session.commit()
         flash('Staff Edited Successfully', 'success')
         return redirect(url_for('staff'))
-    return render_template('edit-staff.html', staff_to_edit=staff_to_edit)
+    return render_template('edit-staff.html', staff_to_edit=staff_to_edit, departments=departments)
 
 @app.route('/delete-staff')
 def delete_staff():

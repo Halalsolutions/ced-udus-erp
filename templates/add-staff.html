@@ -88,9 +88,9 @@
 												<label class="form-label">Department</label>
 												<select required name="department" class="form-control">
 													<option value=""></option>
-													<option value="html">HTML</option>
-													<option value="css">CSS</option>
-													<option value="javascript">JavaScript</option>
+                                                    {% for department in departments %}
+													<option value="{{ department.department_name }}">{{ department.department_name }}</option>
+													{% endfor %}
 
 												</select>
 											</div>
