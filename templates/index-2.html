@@ -397,20 +397,20 @@
     <script src="../static/vendor/svganimation/svg.animation.js"></script>
 
 
-    <script>
-    var incomeData = {{ income_data|tojson|safe }};
-    var expenseData = {{ expense_data|tojson|safe }};
-
-    Morris.Bar({
-        element: 'income-expenses-chart',
-        data: incomeData.concat(expenseData),
-        xkey: 'month',
-        ykeys: ['total_income', 'total_expenses'],
-        labels: ['Total Income', 'Total Expenses'],
-        parseTime: false,
-        barColors: ['#6fb3e0', '#ef5f5f'],  // Customize the bar colors if needed
-    });
-</script>
+{#    <script>#}
+{#    var incomeData = {{ income_data|tojson|safe }};#}
+{#    var expenseData = {{ expense_data|tojson|safe }};#}
+{##}
+{#    Morris.Bar({#}
+{#        element: 'income-expenses-chart',#}
+{#        data: incomeData.concat(expenseData),#}
+{#        xkey: 'month',#}
+{#        ykeys: ['total_income', 'total_expenses'],#}
+{#        labels: ['Total Income', 'Total Expenses'],#}
+{#        parseTime: false,#}
+{#        barColors: ['#6fb3e0', '#ef5f5f'],  // Customize the bar colors if needed#}
+{#    });#}
+{#</script>#}
 
 
 </body>
