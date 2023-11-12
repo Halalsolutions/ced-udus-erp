@@ -401,8 +401,6 @@
     var incomeData = {{ income_data|tojson|safe }};
     var expenseData = {{ expense_data|tojson|safe }};
 
-    var monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
     Morris.Bar({
         element: 'income-expenses-chart',
         data: incomeData.concat(expenseData),
@@ -410,12 +408,9 @@
         ykeys: ['total_income', 'total_expenses'],
         labels: ['Total Income', 'Total Expenses'],
         parseTime: false,
-        xLabelFormat: function(x) {
-            return monthNames[x.month - 1];  // Adjusted to use x.month
-        },
         barColors: ['#6fb3e0', '#ef5f5f'],  // Customize the bar colors if needed
     });
-    </script>
+</script>
 
 
 </body>

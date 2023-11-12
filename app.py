@@ -172,6 +172,18 @@ def calculate_fees_percentage_increased(trainees):
     percentage_increase = ((current_month_trainees - last_month_trainees) / last_month_trainees) * 100
     return f"{percentage_increase:.2f}% increase from last month"
 
+def number_to_month_name(month_number):
+    month_names = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+
+    if 1 <= month_number <= 12:
+        return month_names[month_number - 1]
+    else:
+        return 'Invalid Month Number'
+
+
 # get income expense data for moris chart by month
 def get_monthly_income_expense_data():
     # calculate total income by month
@@ -185,8 +197,8 @@ def get_monthly_income_expense_data():
                                     ).group_by(func.extract('month', InventoryItem.purchase_date)).all()
 
     # Convert the result to a list of dictionaries
-    income_data = [{'month': month, 'total_income': total_income} for month, total_income in income_data]
-    expense_data = [{'month': month, 'total_expenses': total_expenses} for month, total_expenses in expense_data]
+    income_data = [{'month': number_to_month_name(month), 'total_income': int(total_income)} for month, total_income in income_data]
+    expense_data = [{'month': number_to_month_name(month), 'total_expenses': int(total_expenses)} for month, total_expenses in expense_data]
 
     return income_data, expense_data
 
