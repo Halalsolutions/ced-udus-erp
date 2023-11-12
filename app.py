@@ -6,6 +6,7 @@ from sqlalchemy import Column, String, LargeBinary, event, func, cast, Date
 import os
 import uuid
 from datetime import datetime
+from functools import wraps
 
 #Setting up Flask
 app = Flask(__name__)
@@ -19,7 +20,7 @@ app.config['TOASTR_TIMEOUT'] = 3000
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # DB configurations (sqlalchemy)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('database_uri')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('local_database_uri')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -171,6 +172,22 @@ def calculate_fees_percentage_increased(trainees):
     percentage_increase = ((current_month_trainees - last_month_trainees) / last_month_trainees) * 100
     return f"{percentage_increase:.2f}% increase from last month"
 
+# Functions t check current user
+def check_login_status():
+    if not current_user.is_authenticated:
+        flash('Login To Continue')
+        return render_template('page-login.html')
+
+def login_is_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('Login To Continue')
+            return redirect(url_for('login'))
+
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 def login_or_dashboard():
     if current_user.is_authenticated:
@@ -178,8 +195,12 @@ def login_or_dashboard():
     else:
         return redirect(url_for('login'))
 
+
+
 @app.route('/dashboard')
+@login_is_required
 def home():
+
     current_month = datetime.now().month
 
     #New Students Total
@@ -261,12 +282,16 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route("/all-facilitators")
+@login_is_required
 def all_facilitators():
+
     facilitators = Facilitator.query.all()
     return render_template("all-professors.html", faclitators=facilitators)
 
 @app.route("/add-facilitator", methods=['GET', 'POST'])
+@login_is_required
 def add_facilitator():
+
     departments = Department.query.all()
     if request.method == 'POST':
         new_facilitator = Facilitator(first_name=request.form.get('first_name'),
@@ -285,7 +310,9 @@ def add_facilitator():
     return render_template('add-professor.html', departments=departments)
 
 @app.route("/edit-facilitator", methods=['GET', 'POST'])
+@login_is_required
 def edit_facilitator():
+
     facilitator_to_edit = Facilitator.query.get(request.args.get('facilitator_id'))
     departments = Department.query.all()
     if request.method == 'POST':
@@ -303,7 +330,9 @@ def edit_facilitator():
     return render_template('edit-professor.html', facilitator_to_edit=facilitator_to_edit, departments=departments)
 
 @app.route('/delete-facilitator')
+@login_is_required
 def delete_facilitator():
+
     facilitator_to_delete = Facilitator.query.get(request.args.get('facilitator_id'))
     db.session.delete(facilitator_to_delete)
     db.session.commit()
@@ -312,16 +341,22 @@ def delete_facilitator():
 
 
 @app.route("/facilitator-profile")
+@login_is_required
 def facilitator_profile():
+
     return render_template('professor-profile.html')
 
 @app.route("/all-trainees")
+@login_is_required
 def all_trainees():
+
     trainees = Trainee.query.all()
     return render_template('all-students.html', trainees=trainees)
 
 @app.route("/add-trainee", methods=['GET', 'POST'])
+@login_is_required
 def add_trainee():
+
     courses = Course.query.all()
     departments = Department.query.all()
     if request.method == 'POST':
@@ -347,7 +382,9 @@ def add_trainee():
     return render_template('add-student.html', courses=courses, departments=departments)
 
 @app.route('/edit-trainee', methods=['GET', 'POST'])
+@login_is_required
 def edit_trainee():
+
     trainee_to_edit = Trainee.query.get(request.args.get('trainee_id'))
     if request.method == 'POST':
         trainee_to_edit.first_name = request.form.get('first_name')
@@ -365,7 +402,9 @@ def edit_trainee():
     return render_template('edit-student.html', trainee_to_edit=trainee_to_edit)
 
 @app.route('/delete-trainee')
+@login_is_required
 def delete_trainee():
+
     trainee_to_delete = Trainee.query.get(request.args.get('trainee_id'))
     print(trainee_to_delete)
     db.session.delete(trainee_to_delete)
@@ -374,16 +413,22 @@ def delete_trainee():
     return redirect(url_for('all_trainees'))
 
 @app.route("/about-trainee")
+@login_is_required
 def about_trainee():
+
     return render_template('about-student.html')
 
 @app.route('/all-courses')
+@login_is_required
 def all_courses():
+
     courses = Course.query.all()
     return render_template('all-courses.html', courses=courses)
 
 @app.route('/add-course', methods=['GET', 'POST'])
+@login_is_required
 def add_course():
+
     facilitators = Facilitator.query.all()
     if request.method == 'POST':
         image_file = request.files['image']
@@ -408,7 +453,9 @@ def add_course():
     return render_template('add-courses.html', facilitators=facilitators)
 
 @app.route('/edit-course', methods=['GET', 'POST'])
+@login_is_required
 def edit_course():
+
     facilitators = Facilitator.query.all()
     course_to_edit = Course.query.get(request.args.get('course_id'))
     if request.method == 'POST':
@@ -423,17 +470,23 @@ def edit_course():
     return render_template('edit-courses.html', course_to_edit=course_to_edit, facilitators=facilitators)
 
 @app.route('/about-course')
+@login_is_required
 def about_course():
+
     course_to_display = Course.query.get(request.args.get('course_id'))
     return render_template('about-courses.html', course_to_display=course_to_display)
 
 @app.route('/inventory')
+@login_is_required
 def inventory():
+
     inventory_items = InventoryItem.query.all()
     return render_template('all-library.html', inventory_items=inventory_items)
 
 @app.route('/add-to-inventory', methods=['GET', 'POST'])
+@login_is_required
 def add_to_inventory():
+
     courses = Course.query.all()
     departments = Department.query.all()
     if request.method == 'POST':
@@ -452,7 +505,9 @@ def add_to_inventory():
     return render_template('add-library.html', departments=departments, courses=courses)
 
 @app.route('/edit-inventory-item', methods=['GET', 'POST'])
+@login_is_required
 def edit_inventory_item():
+
     courses = Course.query.all()
     departments = Department.query.all()
     item_to_edit = InventoryItem.query.get(request.args.get('item_id'))
@@ -470,7 +525,9 @@ def edit_inventory_item():
     return render_template('edit-library.html', item_to_edit=item_to_edit, departments=departments, courses=courses)
 
 @app.route('/delete-inventory-item')
+@login_is_required
 def delete_inventory_item():
+
     item_to_delete = InventoryItem.query.get(request.args.get('item_id'))
     db.session.delete(item_to_delete)
     db.session.commit()
@@ -478,12 +535,16 @@ def delete_inventory_item():
     return redirect(url_for('inventory'))
 
 @app.route('/departments')
+@login_is_required
 def departments():
+
     all_departments = Department.query.all()
     return render_template('all-departments.html', all_departments=all_departments)
 
 @app.route('/add-department', methods=['GET', 'POST'])
+@login_is_required
 def add_department():
+
     if request.method == 'POST':
         new_department = Department(department_name=request.form.get('department_name'),
                                     department_head=request.form.get('department_head'),
@@ -497,7 +558,9 @@ def add_department():
     return render_template('add-departments.html')
 
 @app.route('/edit-department', methods=['GET', 'POST'])
+@login_is_required
 def edit_department():
+
     department_to_edit = Department.query.get(request.args.get('department_id'))
     if request.method == 'POST':
         department_to_edit.department_name = request.form.get('department_name')
@@ -510,7 +573,9 @@ def edit_department():
     return render_template('edit-departments.html', department_to_edit=department_to_edit)
 
 @app.route('/delete-department')
+@login_is_required
 def delete_department():
+
     department_to_delete = Department.query.get(request.args.get('department_id'))
     db.session.delete(department_to_delete)
     db.session.commit()
@@ -518,12 +583,16 @@ def delete_department():
     return redirect(url_for('departments'))
 
 @app.route('/staff')
+@login_is_required
 def staff():
+
     all_staff = Staff.query.all()
     return render_template('all-staff.html', all_staff=all_staff)
 
 @app.route('/add-staff', methods=['GET', 'POST'])
+@login_is_required
 def add_staff():
+
     departments = Department.query.all()
     if request.method == 'POST':
         new_staff = Staff(first_name=request.form.get('first_name'),
@@ -543,7 +612,9 @@ def add_staff():
     return render_template('add-staff.html', departments=departments)
 
 @app.route('/edit-staff', methods=['GET', 'POST'])
+@login_is_required
 def edit_staff():
+
     departments = Department.query.all()
     staff_to_edit = Staff.query.get(request.args.get('staff_id'))
     if request.method == 'POST':
@@ -562,7 +633,9 @@ def edit_staff():
     return render_template('edit-staff.html', staff_to_edit=staff_to_edit, departments=departments)
 
 @app.route('/delete-staff')
+@login_is_required
 def delete_staff():
+
     staff_to_delete = Staff.query.get(request.args.get('staff_id'))
     db.session.delete(staff_to_delete)
     db.session.commit()
@@ -570,16 +643,22 @@ def delete_staff():
     return redirect(url_for('staff'))
 
 @app.route('/staff-profile')
+@login_is_required
 def staff_profile():
+
     return render_template('staff-profile.html')
 
 @app.route('/fees-collection')
+@login_is_required
 def fees_collection():
+
     all_fees = Fee.query.all()
     return render_template('fees-collection.html', all_fees=all_fees)
 
 @app.route('/add-fees', methods=['GET', 'POST'])
+@login_is_required
 def add_fees():
+
     trainees = Trainee.query.all()
     departments = Department.query.all()
     courses = Course.query.all()
@@ -600,7 +679,9 @@ def add_fees():
     return render_template('add-fees.html', trainees=trainees, departments=departments, courses=courses)
 
 @app.route('/fees-receipt')
+@login_is_required
 def fees_receipt():
+
     fee = Fee.query.get(request.args.get('fee_id'))
     trainee = Trainee.query.get(fee.trainee_id)
     current_date = datetime.now().strftime("%d/%m/%Y")
@@ -608,7 +689,9 @@ def fees_receipt():
     return render_template('fees-receipt.html', fee=fee, current_date=current_date, trainee=trainee)
 
 @app.route('/edit-fee', methods=['GET', 'POST'])
+@login_is_required
 def edit_fee():
+
     trainees = Trainee.query.all()
     departments = Department.query.all()
     courses = Course.query.all()
@@ -632,7 +715,9 @@ def error_404():
     return render_template('page-error-404.html')
 
 @app.route('/event-management')
+@login_is_required
 def event_management():
+
     return render_template('event-management.html')
 
 if __name__ == '__main__':
