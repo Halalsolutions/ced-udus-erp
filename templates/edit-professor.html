@@ -100,10 +100,9 @@
                                                     <label class="form-label">Department</label>
                                                     <select name="department" class="form-control" required>
                                                         <option value=""></option>
-                                                        <option {% if facilitator_to_edit.department == 'html' %}selected{% endif %} value="html">HTML</option>
-                                                        <option {% if facilitator_to_edit.department == 'css' %}selected{% endif %} value="css">CSS</option>
-                                                        <option {% if facilitator_to_edit.department == 'javascript' %}selected{% endif %} value="javascript">JavaScript</option>
-                                                        <option {% if facilitator_to_edit.department == 'angular' %}selected{% endif %} value="angular">Angular</option>
+                                                        {% for department in departments %}
+                                                        <option {% if facilitator_to_edit.department == department.department_name %}selected{% endif %} value="html">{{ department.department_name }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>

@@ -446,7 +446,8 @@ def add_trainee():
 @app.route('/edit-trainee', methods=['GET', 'POST'])
 @login_is_required
 def edit_trainee():
-
+    departments = Department.query.all()
+    courses = Course.query.all()
     trainee_to_edit = Trainee.query.get(request.args.get('trainee_id'))
     if request.method == 'POST':
         date = to_date_obj(request.form.get('registration_date'))
@@ -463,7 +464,7 @@ def edit_trainee():
         db.session.commit()
         flash('Trainee Edited Successfully', 'success')
         return redirect(url_for('all_trainees'))
-    return render_template('edit-student.html', trainee_to_edit=trainee_to_edit)
+    return render_template('edit-student.html', trainee_to_edit=trainee_to_edit, departments=departments, courses=courses)
 
 @app.route('/delete-trainee')
 @login_is_required

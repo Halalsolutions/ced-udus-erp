@@ -14,7 +14,7 @@
 				<div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Add Trainee</h4>
+                            <h4>Edit Trainee</h4>
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -65,8 +65,9 @@
 												<label class="form-label">Department</label>
 												<select name="department" class="form-control" required>
 													<option value=""></option>
-													<option {% if trainee_to_edit.department == 'html' %}selected{% endif %} value="html">HTML</option>
-													<option {% if trainee_to_edit.department == 'css' %}selected{% endif %} value="css">CSS</option>
+                                                    {% for department in departments %}
+													<option {% if trainee_to_edit.department == department.department_name %}selected{% endif %} value="{{ department.department_name }}">{{ department.department_name }}</option>
+                                                    {% endfor %}
 												</select>
 											</div>
 										</div>
@@ -75,8 +76,9 @@
 												<label class="form-label">Course</label>
 												<select name="course" class="form-control" required>
 													<option value=""></option>
-													<option {% if trainee_to_edit.course == 'html' %}selected{% endif %} value="html">HTML</option>
-													<option {% if trainee_to_edit.course == 'css' %}selected{% endif %} value="css">CSS</option>
+                                                    {% for course in courses %}
+													<option {% if trainee_to_edit.course == course.course_name %}selected{% endif %} value="{{ course.course_name }}">{{ course.course_name }}</option>
+													{% endfor %}
 												</select>
 											</div>
 										</div>
