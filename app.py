@@ -160,8 +160,8 @@ def calculate_total_amount():
 # claculate Students Increase Percentage
 def calculate_percentage_increased(trainees):
     current_month = datetime.now().month
-    last_month_trainees = Trainee.query.filter(func.extract('month', cast(Trainee.registration_date, Date)) == current_month - 1).count()
-    current_month_trainees = Trainee.query.filter(func.extract('month', cast(Trainee.registration_date, Date)) == current_month).count()
+    last_month_trainees = Trainee.query.filter(func.extract('month', Trainee.registration_date) == current_month - 1).count()
+    current_month_trainees = Trainee.query.filter(func.extract('month', Trainee.registration_date) == current_month).count()
     if last_month_trainees == 0:
         return "No Trainees Registered last month"
 
@@ -169,14 +169,26 @@ def calculate_percentage_increased(trainees):
     return f"{percentage_increase:.2f}% increase from last month"
 
 # claculate Fees Increase Percentage
-def calculate_fees_percentage_increased(trainees):
+def calculate_fees_percentage_increased():
     current_month = datetime.now().month
-    last_month_trainees = Fee.query.filter(func.extract('month', cast(Fee.payment_date, Date)) == current_month - 1).count()
-    current_month_trainees = Fee.query.filter(func.extract('month', cast(Fee.payment_date, Date)) == current_month).count()
-    if last_month_trainees == 0:
-        return "No Fees Were Collected last month"
+    last_month_total = (
+        Fee.query
+        .with_entities(func.sum(Fee.amount))
+        .filter(func.extract('month', Fee.payment_date) == current_month - 1)
+        .scalar()
+    )
 
-    percentage_increase = ((current_month_trainees - last_month_trainees) / last_month_trainees) * 100
+    current_month_total = (
+        Fee.query
+        .with_entities(func.sum(Fee.amount))
+        .filter(func.extract('month', Fee.payment_date) == current_month)
+        .scalar()
+    )
+
+    if last_month_total is None:
+        return "No records last month"
+
+    percentage_increase = ((current_month_total - last_month_total) / last_month_total) * 100
     return f"{percentage_increase:.2f}% increase from last month"
 
 
@@ -258,7 +270,7 @@ def home():
 
     # Fee percentage increase calculation
     all_fees = Fee.query.all()
-    fee_percentage_increase = calculate_fees_percentage_increased(all_fees)
+    fee_percentage_increase = calculate_fees_percentage_increased()
 
     # calculate total fees collected
     all_fees = Fee.query.all()
